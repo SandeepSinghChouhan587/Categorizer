@@ -79,7 +79,7 @@ function onError(error) {
 /**
  * Event listener for HTTP server "listening" event.
  */
-console.log("server is running on PORT:",port);
+
 
 function onListening() {
   var addr = server.address();
