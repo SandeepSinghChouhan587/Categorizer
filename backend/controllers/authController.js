@@ -2,6 +2,7 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcryptjs");
+const sgMail = require("@sendgrid/mail");
 
 // Nodemailer transporter
 const transporter = nodemailer.createTransport({
@@ -60,17 +61,22 @@ const register = async (req,res)=>{
     );
 
     // send OTP email
-    await transporter.sendMail({
-      from:`"Categorizer" <${process.env.EMAIL_USER}>`,
-      to:email,
-      subject:"Your OTP Verification Code",
-      html:`
-        <h2>Email Verification</h2>
-        <p>Your OTP is:</p>
-        <h1>${otp}</h1>
-        <p>This OTP expires in 5 minutes.</p>
-      `
-    });
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+const msg = {
+  to: email, // recipient
+  from: process.env.EMAIL_USER, // verified sender
+  subject: "Your OTP Verification Code",
+  html: `
+    <h2>Email Verification</h2>
+    <p>Your OTP is:</p>
+    <h1>${otp}</h1>
+    <p>This OTP expires in 5 minutes.</p>
+  `,
+};
+
+await sgMail.send(msg);
+
   console.log("tokensend:",tempToken);
     res.status(200).json({
       message:"OTP sent to email",
