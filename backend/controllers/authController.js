@@ -145,7 +145,7 @@ const login = async (req,res)=>{
     const user = await User.findOne({ email });
 
     if(!user){
-      return res.status(400).json({ message:"Invalid email" });
+      return res.status(400).json({ message:"Looks like you don't have an Account please signup" });
     }
 
     const isMatch = await user.comparePassword(password);
