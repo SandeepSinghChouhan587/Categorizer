@@ -12,7 +12,7 @@ const AuthPage = () => {
 
   const [isLogin,setIsLogin] = useState(true);
   const [loading,setLoading] = useState(false);
-  const [isVerifying,setIsVerifying] = useState(false);
+  const [isVerifying,setIsVerifying] = useState(true);
   const [storedTempToken,setTempToken] = useState("");
   const {setUserData} = useContext(AppContext);
   
@@ -166,8 +166,9 @@ const AuthPage = () => {
               maxLength={6}
               value={otp}
               onChange={(e)=>setOtp(e.target.value)}
-              className="w-full p-3 rounded bg-gray-700 mb-4"
+              className="w-full p-3 rounded bg-gray-700 "
             />
+            <p className="text-green-500 mb-4">If email is not received please check spam emails</p>
 
             <button
               onClick={handleVerifyOtp}
