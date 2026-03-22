@@ -6,11 +6,13 @@ import { AppContext } from "../context/AppContext";
 import { CgProfile } from "react-icons/cg";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { RxCross2 } from "react-icons/rx";
+
 
 function Navbar() {
 
   const location = useLocation();
-  const [mobileMenu, setMobileMenu] = useState(false);
+  const [mobileMenu, setMobileMenu] = useState(true);
   const { user } = useContext(AppContext);
 
   const navRef = useRef(null);
@@ -179,8 +181,8 @@ function Navbar() {
 
         </div>
 
-        <button onClick={toggleMenu} className="md:hidden text-gray-600">
-          <svg
+        <button onClick={toggleMenu} className="md:hidden text-gray-200">
+         {mobileMenu?(<RxCross2 className="text-3xl" />):(<svg
             className="w-6 h-6"
             fill="none"
             stroke="currentColor"
@@ -188,7 +190,7 @@ function Navbar() {
             viewBox="0 0 24 24"
           >
             <path d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
+          </svg>)} 
         </button>
 
       </nav>
