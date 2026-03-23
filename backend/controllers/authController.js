@@ -96,7 +96,7 @@ await sgMail.send(msg);
 const verifyOtp = async (req,res)=>{
 
   const {otp,tempToken} = req.body;
-  console.log(tempToken);
+
 
   try{
 

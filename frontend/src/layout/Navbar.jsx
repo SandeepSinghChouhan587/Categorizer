@@ -12,7 +12,7 @@ import { RxCross2 } from "react-icons/rx";
 function Navbar() {
 
   const location = useLocation();
-  const [mobileMenu, setMobileMenu] = useState(true);
+  const [mobileMenu, setMobileMenu] = useState(false);
   const { user } = useContext(AppContext);
 
   const navRef = useRef(null);
