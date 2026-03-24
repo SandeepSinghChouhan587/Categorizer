@@ -14,7 +14,7 @@ const AuthPage = () => {
   const [loading,setLoading] = useState(false);
   const [isVerifying,setIsVerifying] = useState(false);
   const [storedTempToken,setTempToken] = useState("");
-  const {setUserData} = useContext(AppContext);
+  const {setUserData,setUser} = useContext(AppContext);
   
 
   const [otp,setOtp] = useState("");
@@ -99,6 +99,8 @@ const AuthPage = () => {
       const endpoint = isLogin
         ? "/otp/login/verify-otp"
         :"/otp/verify-otp";
+  
+
       const {data} = await API.post(endpoint,{
         otp,
         tempToken:storedTempToken
@@ -107,6 +109,7 @@ const AuthPage = () => {
       
       if(data.token){
         localStorage.setItem("token",data.token);
+        setUser(true);
         setUserData(data.user);
         navigate("/");
       }
@@ -137,7 +140,9 @@ const AuthPage = () => {
     });
 
     // update tempToken (VERY IMPORTANT)
-    setTempToken(data.tempToken);
+    if(data.tempToken){
+      setTempToken(data.tempToken);
+    }
 
     toast.success(data.message);
 
@@ -159,9 +164,9 @@ const AuthPage = () => {
           <div>
 
             <h2 className="text-2xl font-bold text-center mb-6">
-              Verify Email
+              {isLogin?"verify OTP to login":"Verify Email"}
             </h2>
-
+            
             <input
               type="number"
               placeholder="Enter OTP"

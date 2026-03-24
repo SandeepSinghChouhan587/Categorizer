@@ -10,11 +10,31 @@ import Saved from "./pages/Saved";
 import ScrollToTop from "./components/ui/ScrollToTop";
 import { AppContext } from "./context/AppContext";
 import Profile from "./pages/Profile";
+import Lenis from "lenis";
 
 
 function App() {
 const {user} = useContext(AppContext);
+useEffect(() => {
+    /**For Smooth Scrolling */
+    const lenis = new Lenis({
+      lerp: 0.08,       // smoothness duration
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // easing curve
+      smooth: true,          // smooth scroll
+      smoothTouch: true,     // smooth touch scroll
+      direction: "vertical"  // vertical scrolling
+    });
 
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => lenis.destroy(); // cleanup on unmount
+  }, []);
+  
 
   return (
     <div className="bg-transparent relative">

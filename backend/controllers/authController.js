@@ -157,11 +157,11 @@ const verifyOtp = async (req,res)=>{
 const login = async (req,res)=>{
 
   const { email, password } = req.body;
-
+ 
   try{
 
     const user = await User.findOne({ email });
-  
+   console.log(user);
     if(!user || user === null){
       return res.status(400).json({ message:"Looks like you don't have an Account please signup" });
     }
@@ -184,7 +184,9 @@ const login = async (req,res)=>{
     const salt = await bcrypt.genSalt(10);
     const otpHash = await bcrypt.hash(otp,salt);
 
-    const savedOtp = await Otp.create({
+    await Otp.findOneAndDelete({email:email})
+
+     await Otp.create({
       email:email,
       otpHash:otpHash
     });
@@ -262,8 +264,8 @@ const LoginVerifyOtp = async (req,res)=>{
     
     const token = generateToken(user._id);
 
-    res.json({
-      message:"Login successfully",
+    res.status(201).json({
+      message:"Email verified and loggedin successfully",
       token,
       user:{
         id:user._id,
@@ -271,11 +273,6 @@ const LoginVerifyOtp = async (req,res)=>{
         email:user.email
       }
     });
-
-    res.status(201).json({
-      message:"Email verified and loggedin successfully"
-    });
-
   }catch(error){
 
     console.log("VERIFY OTP ERROR:",error);

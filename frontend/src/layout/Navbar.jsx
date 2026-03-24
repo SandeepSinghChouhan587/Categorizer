@@ -97,7 +97,7 @@ function Navbar() {
           <MdCategory className="w-8 h-8" />
         </Link>
 
-        <RouterLink className={`${isHome ? "hidden" : ""}`} to="/#hero">
+        <RouterLink onClick={()=>{setMobileMenu(false)}} className={`${isHome ? "hidden" : ""}`} to="/#hero">
           <MdCategory className="w-8 h-8" />
         </RouterLink>
 

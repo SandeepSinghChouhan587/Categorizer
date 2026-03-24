@@ -1,10 +1,12 @@
+const Otp = require("../models/Otp");
 const RateLimit = require("../models/RateLimit");
 
-// Generic limiter function (reusable)
+
 const rateLimiter = (limit, windowMs, routeName) => {
   return async (req, res, next) => {
     try {
       const userId = req.user?.id || req.ip; // logged-in user OR IP
+      const email = req.user?.email
       const now = new Date();
 
       let record = await RateLimit.findOne({ userId, route: routeName });
@@ -32,6 +34,7 @@ const rateLimiter = (limit, windowMs, routeName) => {
 
       // If limit exceeded
       if (record.count >= limit) {
+        Otp.findOneAndDelete({email})
         return res.status(429).json({
           success: false,
           message: "Too many requests. Try again later.",
