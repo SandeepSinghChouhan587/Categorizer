@@ -67,16 +67,11 @@ const AuthPage = () => {
       const endpoint = isLogin
         ? "/auth/login"
         : "/auth/register";
-
+      
       const {data} = await API.post(endpoint,form);
-
+      
       toast.success(data.message);
 
-      if(data.token){
-        localStorage.setItem("token",data.token);
-        setUserData(data.user);
-        navigate("/");
-      }
       if(data.requiresVerification){
         setIsVerifying(true);
         setTempToken(data.tempToken);
@@ -97,15 +92,24 @@ const AuthPage = () => {
 
   // VERIFY OTP
   const handleVerifyOtp = async ()=>{
-
     try{
 
       setLoading(true);
-
-      const {data} = await API.post("/auth/verify-otp",{
+      
+      const endpoint = isLogin
+        ? "/otp/login/verify-otp"
+        :"/otp/verify-otp";
+      const {data} = await API.post(endpoint,{
         otp,
         tempToken:storedTempToken
       });
+
+      
+      if(data.token){
+        localStorage.setItem("token",data.token);
+        setUserData(data.user);
+        navigate("/");
+      }
 
       toast.success(data.message);
 
@@ -126,23 +130,21 @@ const AuthPage = () => {
 
 
   // RESEND OTP
-  const resendOtp = async ()=>{
+ const resendOtp = async () => {
+  try {
+    const { data } = await API.post("/otp/resend-otp", {
+      tempToken: storedTempToken 
+    });
 
-    try{
+    // update tempToken (VERY IMPORTANT)
+    setTempToken(data.tempToken);
 
-      const {data} = await API.post("/auth/resend-otp",{
-        email:form.email
-      });
+    toast.success(data.message);
 
-      toast.success(data.message);
-
-    }catch(error){
-
-      toast.error("Failed to resend OTP");
-    }
-
-  };
-
+  } catch (error) {
+    toast.error("Failed to resend OTP");
+  }
+};
 
   return (
 

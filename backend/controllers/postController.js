@@ -31,7 +31,7 @@ exports.createPost = async (req, res) => {
       `${metadata.title} ${metadata.description} ${metadata.hashtags.join(" ")}`.trim();
 
     const categoryName = await categorizeContent(textForAI);
-    console.log("categoryName:", categoryName);
+  
     // Find category document
     let categoryDoc = await Category.findOne({
       name: categoryName,
